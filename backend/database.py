@@ -41,7 +41,7 @@ def seed_data():
 
         # 1. Rooms / Scenes
         scenes = [
-            ("The Entrance Hall", "The heavy oak door slams shut behind you. The floorboards groan beneath your feet.", -5,
+            ("The Entrance Hall", "The heavy oak door slams shut behind you. The floorboards groan beneath your feet.", 0,
             ),
             ( "The Dusty Library", "Towering shelves filled with rotting grimoires. A draft makes the chandelier sway.", 0,
             ),

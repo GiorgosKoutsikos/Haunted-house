@@ -21,6 +21,7 @@ function renderScene(data) {
   document.getElementById('scene-description').innerText = data.description;
 
   currentSanity += data.sanity_impact;
+  currentSanity = Math.min(100, Math.max(0, currentSanity));
   if (currentSanity <= 0) currentSanity = 0;
   document.getElementById('sanity-value').innerText = currentSanity;
 

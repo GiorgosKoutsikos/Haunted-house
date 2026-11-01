@@ -1,8 +1,11 @@
+from pathlib import Path
 import sqlite3
+
+DB_PATH = Path(__file__).resolve().parent / "game.db"
 
 
 def get_connection():
-    conn = sqlite3.connect("game.db")
+    conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -39,28 +42,64 @@ def seed_data():
     count = cursor.fetchone()[0]
     if count == 0:
 
-        # 1. Rooms / Scenes
+        # 1.Rooms / Scenes
         scenes = [
-            ("The Entrance Hall", "The heavy oak door slams shut behind you. The floorboards groan beneath your feet.", 0,
-            ),
-            ( "The Dusty Library", "Towering shelves filled with rotting grimoires. A draft makes the chandelier sway.", 0,
-            ),
-            ( "The Frozen Attic", "Complete darkness and biting cold. Shadows seem to twist just out of sight.", -10,
-            ),
+            (1, "The Entrance Hall", "The heavy oak door is locked tight. Dust particles float in pale moonlight, while three corridors stretch into darkness.", 0),
+            (2, "The Grand Library", "Towering shelves hold cursed tomes. Whispers echo through the tall rows of books.", -10),
+            (3, "The Dining Hall", "A long banquet table set with silver plates covered in cobwebs. A cold breeze blows from the terrace.", -5),
+            (4, "The Damp Basement", "Stagnant water reaches your knees. Distant chains clatter deeper in the subterranean vault.", -25),
+            (5, "The Secret Study", "A warm lantern still burns softly. Old maps cover the mahogany desk, offering a moment of calm.", 15),
+            (6, "The Sunken Conservatory", "Shattered glass ceilings expose dark clouds. Tangled, thorny vines grip the cracked marble statues.", -10),
+            (7, "The Wine Cellar", "Rows of shattered barrels line the room. Behind an iron grate, you notice a low maintenance tunnel.", -15),
+            (8, "The Ritual Chamber", "Runes blaze with violet fire. Horrors from beyond tear into your thoughts. Madness consumes you.", -100),
+            (9, "The Collapsed Tunnel", "You crawl into the narrow opening, but the ceiling gives way under immense weight. You are trapped forever.", -100),
+            (10, "The Garden of Dawn", "You push through the rusted outer gate and step onto fresh grass. Morning light breaks on the horizon. You escaped alive!", 0)
         ]
+
         cursor.executemany(
-            "INSERT INTO scenes (title, description, sanity_impact) VALUES (?, ?, ?)",
+            "INSERT INTO scenes (id, title, description, sanity_impact) VALUES (?, ?, ?, ?)",
             scenes,
         )
 
-        # 2. Choices for each scene
+        # 2.Choices for each scene
         choices = [
-            # (scene_id, choice_text, target_scene_id)
-            (1, "Proceed into the Library", 2),
-            (1, "Climb the creaking stairs to the Attic", 3),
+            #Choices from Scene 1: Entrance Hall
+            (1, "Search the archives in the Grand Library", 2),
+            (1, "Walk towards the Dining Hall", 3),
+            (1, "Descend into the dark Basement", 4),
+
+            #Choices from Scene 2: Grand Library
+            (2, "Inspect the carved bookshelf for a hidden mechanism", 5),
+            (2, "Follow the narrow side door towards the Conservatory", 6),
             (2, "Return to the Entrance Hall", 1),
-            (3, "Rush back down to the Entrance Hall", 1),
-        ]
+
+            #Choices from Scene 3: Dining Hall
+            (3, "Head out through the French doors into the Conservatory", 6),
+            (3, "Open the service hatch leading down to the Wine Cellar", 7),
+            (3, "Walk back into the Entrance Hall", 1),
+
+            #Choices from Scene 4: Damp Basement
+            (4, "Wade toward the iron gate leading to the Wine Cellar", 7),
+            (4, "Step toward the glowing purple archway", 8),
+            (4, "Climb the stairs back to the Entrance Hall", 1),
+
+            #Choices from Scene 5: Secret Study (Safe spot)
+            (5, "Unlock the heavy iron trapdoor with the brass key", 10),
+            (5, "Inspect the ventilation shaft behind the tapestry", 9),
+            (5, "Walk back into the Library", 2),
+
+            #Choices from Scene 6: Conservatory
+            (6, "Climb over the cracked stone balcony toward freedom", 10),
+            (6, "Investigate the dark root-covered opening in the floor", 8),
+            (6, "Retreat back to the Dining Hall", 3),
+
+            #Choices from Scene 7: Wine Cellar
+            (7, "Squeeze through the narrow maintenance duct", 9),
+            (7, "Pry open the wooden cellar door leading upward", 5),
+            (7, "Retreat toward the wet basement stairs", 4)
+
+            #Scenes 8, 9, 10 have no choices (terminal / end-game rooms)
+]
         cursor.executemany(
             "INSERT INTO choices (scene_id, choice_text, target_scene_id) VALUES (?, ?, ?)",
             choices,

@@ -59,7 +59,7 @@ git clone https://github.com/<your-username>/Haunted-house.git
 cd Haunted-house
 ```
 
-### 2. Set Up a Virtual Environment (Recommended)
+### 2. Set Up a Virtual Environment
 
 ```powershell
 python -m venv venv
@@ -71,8 +71,6 @@ python -m venv venv
 ```powershell
 pip install -r requirements.txt
 ```
-
-_(If you do not have a `requirements.txt` yet, install `fastapi` and `uvicorn[standard]` directly: `pip install fastapi "uvicorn[standard]"`)_
 
 ### 4. Initialize & Populate the Database
 

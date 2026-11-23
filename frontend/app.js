@@ -2,7 +2,7 @@ let currentSanity = 100;
 
 async function loadScene(sceneId) {
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/scenes/${sceneId}`);
+    const response = await fetch(`/api/scenes/${sceneId}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
